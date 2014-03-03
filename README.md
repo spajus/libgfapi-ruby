@@ -22,13 +22,22 @@ Or install it yourself as:
 ```ruby
 require 'glusterfs'
 
+# Create virtual mount
 fs = GlusterFS.new 'my_volume'
 GlusterFS.set_volfile_server fs, 'tcp', '1.2.3.4', 24007
 GlusterFS.init fs
-fd = GlusterFS.creat fs, 'my_file', 2, 0755
+
+# Make a new directory
+GlusterFS.mkdir fs, '/some_dir', 0755
+
+# Write a file
+fd = GlusterFS.creat fs, '/somedir/my_file', 2, 0755
 str = "test data\n"
 GlusterFS.write fd, str, str.size + 1, 0
 GlusterFS.close fd
+
+# Destroy virtual mount
+GlusterFS.fini fs
 ```
 
 ## Contributing
