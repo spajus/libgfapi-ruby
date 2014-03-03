@@ -8,7 +8,7 @@ module GlusterFS
     let(:data) { '123' }
 
     after do
-      file.unlink
+      file.delete
       volume.unmount
     end
 
@@ -39,7 +39,7 @@ module GlusterFS
         let(:data2) { '1234' }
 
         before { file.write(data) }
-        after { file2.unlink }
+        after { file2.delete }
 
         subject { file2.write(data2) }
         it('returns bytes written') { should == data2.length }
@@ -71,7 +71,7 @@ module GlusterFS
 
         before { file.write_file(data) }
         after do
-          file2.unlink
+          file2.delete
           data2.close
         end
 
@@ -80,24 +80,24 @@ module GlusterFS
       end
     end
 
-    context '#unlink' do
+    context '#delete' do
       before do
         file.write(data)
-        file.unlink
+        file.delete
       end
       subject { file.exists? }
       it('deletes the file') { should_not be_true }
     end
 
     context '#exist?' do
+      subject { file.exists? }
+
       context 'on existing file' do
         before { file.write(data) }
-        subject { file.exists? }
         it { should be_true }
       end
 
       context 'on non-existing file' do
-        subject { file.exists? }
         it { should_not be_true }
       end
     end

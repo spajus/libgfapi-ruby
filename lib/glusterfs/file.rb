@@ -49,7 +49,7 @@ class GlusterFS::File
     res
   end
 
-  def unlink
+  def delete
     GlusterFS.unlink(@volume.fs, @path)
   end
 
