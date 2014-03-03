@@ -66,7 +66,7 @@ module GlusterFS
 
   int glfs_set_volfile (glfs_t *fs, const char *volfile);
 =end
-  attach_function :set_volfile, :gfs_set_volfile, [:pointer, :string], :int
+  attach_function :set_volfile, :glfs_set_volfile, [:pointer, :string], :int
 
 =begin
   SYNOPSIS
