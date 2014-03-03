@@ -38,15 +38,25 @@ dir.create
 dir = GlusterDS::Directory.new(volume, '/some_dir')
 dir.delete
 
-# Write a file
+# Create a file from string or bytes
 file = GlusterFS::File.new(volume, '/gfs/file/path')
 size = file.write(data)
+puts "Written #{size} bytes"
+
+# Copy an existing file to gluster
+existing_file = File.open('/path/to/file')
+file = GlusterFS::File.new(volume, '/gfs/file/path')
+size = file.write_file(existing_file)
 puts "Written #{size} bytes"
 
 # Read a file
 file = GlusterFS::File.new(volume, '/gfs/file/path')
 contents = file.read
-contents = file.read
+
+# Read a file into a Tempfile
+file = GlusterFS::File.new(volume, '/gfs/file/path')
+tempfile = file.read_file
+puts "Tempfile path: #{tempfile.path}"
 
 # Delete a file
 file = GlusterFS::File.new(volume, '/gfs/file/path')
