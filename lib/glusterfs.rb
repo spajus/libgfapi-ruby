@@ -1,4 +1,5 @@
 require "glusterfs/version"
+require "glusterfs/file"
 require "ffi"
 
 module GlusterFS
@@ -310,8 +311,8 @@ module GlusterFS
   int glfs_write_async (glfs_fd_t *fd, const void *buf, size_t count, int flags,
             glfs_io_cbk fn, void *data) __THROW;
 =end
-  attach_function :read, :glfs_read, [:pointer, :string, :uint, :int], :uint
-  attach_function :write, :glfs_write, [:pointer, :string, :uint, :int], :uint
+  attach_function :read, :glfs_read, [:pointer, :pointer, :uint, :int], :uint
+  attach_function :write, :glfs_write, [:pointer, :pointer, :uint, :int], :uint
   # TODO async
 
 =begin

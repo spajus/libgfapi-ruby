@@ -31,10 +31,13 @@ GlusterFS.init fs
 GlusterFS.mkdir fs, '/some_dir', 0755
 
 # Write a file
-fd = GlusterFS.creat fs, '/somedir/my_file', 2, 0755
-str = "test data\n"
-GlusterFS.write fd, str, str.size + 1, 0
-GlusterFS.close fd
+file = File.open('/some/file')
+size = GlusterFS::File.write(fs, '/gfs/file/path', file)
+puts "Written #{size} bytes"
+
+# Read a file
+file = GlusterFS::File.read(fs, '/gfs/file/path')
+contents = file.read
 
 # Destroy virtual mount
 GlusterFS.fini fs
