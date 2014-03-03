@@ -66,6 +66,25 @@ file.unlink
 volume.unmount
 ```
 
+## Running Specs
+
+Run specs with `rake spec`. However, you need glusterfs-server running somewhere, and a test mount.
+If you have it in the computer you want to run your tests at (Vagrant works fine), you can do this:
+
+1. Add `127.0.0.1 distfs` to `/etc/hosts`
+2. Run `gluster volume create dist-volume distfs:/dist1 force`
+3. Run `gluster volume start dist-volume`
+4. Run `rake spec`
+
+Another option - use existing cluster, set following env variables before running tests:
+
+```bash
+export GFS_VOLUME='volume-name'
+export GFS_SERVER_HOST='1.2.3.4'
+export GFS_SERVER_PORT=24007
+rake spec
+```
+
 ## Contributing
 
 1. Fork it ( http://github.com/spajus/libgfapi-ruby/fork )
