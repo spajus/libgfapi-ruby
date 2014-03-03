@@ -3,6 +3,10 @@
 Ruby bindings for [libgfapi](https://github.com/gluster/glusterfs/blob/master/api/src/glfs.h)
 (GlusterFS API).
 
+## Warning
+
+This library is currently under active development, and is not ready for production yet.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -23,24 +27,27 @@ Or install it yourself as:
 require 'glusterfs'
 
 # Create virtual mount
-fs = GlusterFS.new 'my_volume'
-GlusterFS.set_volfile_server fs, 'tcp', '1.2.3.4', 24007
-GlusterFS.init fs
+volume =  GlusterFS::Client.mount('my_volume', '1.2.3.4')
 
-# Make a new directory
-GlusterFS.mkdir fs, '/some_dir', 0755
+# Make a new directory (raw)
+GlusterFS.mkdir(volume.fs, '/some_dir', 0755)
 
 # Write a file
-file = File.open('/some/file')
-size = GlusterFS::File.write(fs, '/gfs/file/path', file)
+file = GlusterFS::File.new(volume, '/gfs/file/path')
+size = file.write(data)
 puts "Written #{size} bytes"
 
 # Read a file
-file = GlusterFS::File.read(fs, '/gfs/file/path')
+file = GlusterFS::File.new(volume, '/gfs/file/path')
+contents = file.read
 contents = file.read
 
-# Destroy virtual mount
-GlusterFS.fini fs
+# Delete a file
+file = GlusterFS::File.new(volume, '/gfs/file/path')
+file.unlink
+
+# Unmount virtual mount
+volume.unmount
 ```
 
 ## Contributing

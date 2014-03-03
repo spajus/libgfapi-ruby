@@ -1,0 +1,2 @@
+class GlusterFS::Directory
+end
