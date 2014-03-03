@@ -2,7 +2,8 @@ require 'spec_helper'
 
 module GlusterFS
   describe Directory do
-    let(:volume) { Client.mount(GFS_VOLUME, GFS_SERVER_HOST) }
+    let(:volume) { Volume.new(GFS_VOLUME)
+                         .mount(GFS_SERVER_HOST, GFS_SERVER_PORT) }
     let(:dir_name) { "test-#{Time.now.to_i}" }
     let(:dir) { Directory.new(volume, dir_name) }
 

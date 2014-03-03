@@ -4,6 +4,7 @@ class GlusterFS::Volume
   def initialize(name)
     @name = name
     @fs = GlusterFS.new(@name)
+    self
   end
 
   def mount(host, port = 24007, protocol = 'tcp')
@@ -14,6 +15,7 @@ class GlusterFS::Volume
         "Failed to mount volume '#{volume_name}' on #{protocol}://#{host}:#{port}"
     end
     @mounted = true
+    self
   end
 
   def mounted?

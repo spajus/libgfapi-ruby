@@ -2,7 +2,8 @@ require 'spec_helper'
 
 module GlusterFS
   describe File do
-    let(:volume) { Client.mount(GFS_VOLUME, GFS_SERVER_HOST) }
+    let(:volume) { Volume.new(GFS_VOLUME)
+                         .mount(GFS_SERVER_HOST, GFS_SERVER_PORT) }
     let(:file_name) { "test-#{Time.now.to_i}" }
     let(:file) { File.new(volume, file_name) }
     let(:data) { '123' }

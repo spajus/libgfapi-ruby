@@ -27,10 +27,16 @@ Or install it yourself as:
 require 'glusterfs'
 
 # Create virtual mount
-volume =  GlusterFS::Client.mount('my_volume', '1.2.3.4')
+volume = GlusterFS::Volume.new('my_volume')
+volume.mount('1.2.3.4')
 
-# Make a new directory (raw)
-GlusterFS.mkdir(volume.fs, '/some_dir', 0755)
+# Create a new directory
+dir = GlusterFS::Directory.new(volume, '/some_dir')
+dir.create
+
+# Delete a directory
+dir = GlusterDS::Directory.new(volume, '/some_dir')
+dir.delete
 
 # Write a file
 file = GlusterFS::File.new(volume, '/gfs/file/path')
