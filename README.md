@@ -5,7 +5,7 @@ Ruby bindings for [libgfapi](https://github.com/gluster/glusterfs/blob/master/ap
 
 ## Warning
 
-This library is currently under active development, and is not ready for production yet.
+This library is currently under active development, and API may break often.
 
 ## Installation
 
@@ -37,6 +37,8 @@ dir.create
 # Delete a directory
 dir = GlusterDS::Directory.new(volume, '/some_dir')
 dir.delete
+# or
+volume.delete_dir('/some_dir')
 
 # Create a file from string or bytes
 file = GlusterFS::File.new(volume, '/gfs/file/path')
@@ -60,7 +62,9 @@ puts "Tempfile path: #{tempfile.path}"
 
 # Delete a file
 file = GlusterFS::File.new(volume, '/gfs/file/path')
-file.unlink
+file.delete
+# or
+volume.delete_file('/gfs/file/path')
 
 # Unmount virtual mount
 volume.unmount
@@ -84,6 +88,11 @@ export GFS_SERVER_HOST='1.2.3.4'
 export GFS_SERVER_PORT=24007
 rake spec
 ```
+
+## TODO
+
+Major things missing:
+- Directory listing
 
 ## Contributing
 

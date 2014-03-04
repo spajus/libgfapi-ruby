@@ -338,6 +338,28 @@ module GlusterFS
 =end
   attach_function :lstat, :glfs_lstat, [:pointer, :string, :pointer], :int
 
+=begin
+  glfs_fd_t *glfs_opendir (glfs_t *fs, const char *path) __THROW;
+=end
+  attach_function :opendir, :glfs_opendir, [:pointer, :string], :pointer
+
+=begin
+  int glfs_closedir (glfs_fd_t *fd) __THROW;
+=end
+  attach_function :closedir, :glfs_closedir, [:pointer], :int
+
+=begin
+  @glfs_readdir_r and @glfs_readdirplus_r ARE thread safe AND re-entrant,
+  but the interface has ambiguity about the size of @dirent to be allocated
+  before calling the APIs. 512 byte buffer (for @dirent) is sufficient for
+  all known systems which are tested againt glusterfs/gfapi, but may be
+  insufficient in the future.
+
+  int glfs_readdir_r (glfs_fd_t *fd, struct dirent *dirent,
+                      struct dirent **result) __THROW;
+=end
+  attach_function :readdir_r, :glfs_readdir_r, [:pointer, :pointer, :pointer], :int
+
   # TODO the rest
 
 end

@@ -1,26 +1,28 @@
 require 'ruby-mass'
 module GlusterFS
 
+  # Set MEM_PRINT=1 MEM_ITERATIONS=10000 to get a stress test
+
   def self.mem_size
-    # ObjectSpace.garbage_collect
-    # sleep 3
     _, size = `ps ax -o pid,rss | grep -E "^[[:space:]]*#{$$}"`.strip.split.map(&:to_i)
     size.to_i
   end
 
   describe 'memleaks' do
 
-    let(:iterations) { 10000 }
+    let(:iterations) { (ENV['MEM_ITERATIONS'] || 100).to_i }
 
     before(:all) do
-      puts "GC Settings"
-      puts "RUBY_HEAP_MIN_SLOTS=#{ENV['RUBY_HEAP_MIN_SLOTS']}"
-      puts "RUBY_HEAP_SLOTS_INCREMENT=#{ENV['RUBY_HEAP_SLOTS_INCREMENT']}"
-      puts "RUBY_HEAP_SLOTS_GROWTH_FACTOR=#{ENV['RUBY_HEAP_SLOTS_GROWTH_FACTOR']}"
-      puts "RUBY_GC_MALLOC_LIMIT=#{ENV['RUBY_GC_MALLOC_LIMIT']}"
-      puts "RUBY_FREE_MIN=#{ENV['RUBY_FREE_MIN']}"
-      puts "Initial memory use: #{GlusterFS.mem_size}"
-      Mass.print
+      if ENV['MEM_PRINT']
+        puts "GC Settings"
+        puts "RUBY_HEAP_MIN_SLOTS=#{ENV['RUBY_HEAP_MIN_SLOTS']}"
+        puts "RUBY_HEAP_SLOTS_INCREMENT=#{ENV['RUBY_HEAP_SLOTS_INCREMENT']}"
+        puts "RUBY_HEAP_SLOTS_GROWTH_FACTOR=#{ENV['RUBY_HEAP_SLOTS_GROWTH_FACTOR']}"
+        puts "RUBY_GC_MALLOC_LIMIT=#{ENV['RUBY_GC_MALLOC_LIMIT']}"
+        puts "RUBY_FREE_MIN=#{ENV['RUBY_FREE_MIN']}"
+        puts "Initial memory use: #{GlusterFS.mem_size}"
+        Mass.print
+      end
     end
 
     let(:random_blob) do
@@ -35,7 +37,7 @@ module GlusterFS
       before { root_dir.create }
       after { root_dir.delete }
       specify do
-        puts "Iterations: #{iterations}"
+        puts "Dir Iterations: #{iterations}"
         mem_size_before = GlusterFS.mem_size
         iterations.times do |i|
           dir = Directory.new(volume, "#{root_dir.path}/subdir-#{i}")
@@ -44,7 +46,7 @@ module GlusterFS
         end
         mem_size = GlusterFS.mem_size
         puts "Mem growth: #{mem_size - mem_size_before}"
-        Mass.print
+        Mass.print if ENV['MEM_PRINT']
         (mem_size - mem_size_before).should be < 10240
       end
     end
@@ -53,7 +55,7 @@ module GlusterFS
       before { root_dir.create }
       after { root_dir.delete }
       specify do
-        puts "Iterations: #{iterations}"
+        puts "File Iterations: #{iterations}"
         mem_size_before = GlusterFS.mem_size
         iterations.times do |i|
           file = File.new(volume, "#{root_dir.path}/file-#{i}")
@@ -62,7 +64,7 @@ module GlusterFS
         end
         mem_size = GlusterFS.mem_size
         puts "Mem growth: #{mem_size - mem_size_before}"
-        Mass.print
+        Mass.print if ENV['MEM_PRINT']
         (mem_size - mem_size_before).should be < 10240
       end
     end
