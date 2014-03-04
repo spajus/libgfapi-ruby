@@ -5,7 +5,7 @@ module GlusterFS
 
   describe 'performance' do
     let(:file_mount_point) { ENV['GFS_MOUNT_DIR'] || '/mnt/dist-volume' }
-    let(:iterations) { (ENV['PERF_ITERATIONS'] || 3000).to_i }
+    let(:iterations) { (ENV['PERF_ITERATIONS'] || 100).to_i }
     let!(:random_blob) do
       '0' * 1048576 * 5 # 5MB
     end
