@@ -1,8 +1,8 @@
 require 'ruby-mass'
 module GlusterFS
 
-
   def self.mem_size
+    ObjectSpace.garbage_collect
     _, size = `ps ax -o pid,rss | grep -E "^[[:space:]]*#{$$}"`.strip.split.map(&:to_i)
     size.to_i
   end
@@ -26,7 +26,7 @@ module GlusterFS
       end
     end
 
-    let(:random_blob) do
+    let!(:random_blob) do
       o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
       (0...15000).map { o[rand(o.length)] }.join
     end

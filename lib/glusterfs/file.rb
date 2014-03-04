@@ -7,7 +7,7 @@ class GlusterFS::File
   end
 
   def read_file(buf_size = 4092)
-    raise GlusterFS::Error, "File is empty or does not exist: #{@path}" if lstat[:st_size] < 1
+    check_exists
     fd = GlusterFS.open(@volume.fs, @path, 0)
     temp = Tempfile.new(path.gsub('/', '-'))
     buff = FFI::MemoryPointer.new(:char, buf_size)
@@ -22,6 +22,7 @@ class GlusterFS::File
   end
 
   def read(buf_size = 4092)
+    check_exists
     fd = GlusterFS.open(@volume.fs, @path, 0)
     temp = ''
     buff = FFI::MemoryPointer.new(:char, buf_size)
@@ -35,9 +36,13 @@ class GlusterFS::File
     temp
   end
 
-  def write_file(file, perms = 0644)
+  def write_file(file, perms = 0644, buffer_size = 4092)
     fd = GlusterFS.creat(@volume.fs, path, 2, perms)
-    res = GlusterFS.write(fd, file.read, file.size, 0)
+    res = 0
+    until file.eof?
+      chunk = file.read(buffer_size)
+      res += GlusterFS.write(fd, chunk, chunk.size , 0)
+    end
     GlusterFS.close(fd)
     res
   end
@@ -65,6 +70,13 @@ class GlusterFS::File
 
   def size
     lstat[:st_size]
+  end
+
+  private
+
+  # Reading non-existing file causes segfault on file.read
+  def check_exists
+    raise GlusterFS::Error, "File does not exist: #{@path}" unless exists?
   end
 
 end

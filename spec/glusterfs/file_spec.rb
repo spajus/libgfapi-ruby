@@ -48,9 +48,10 @@ module GlusterFS
     end
 
     context '#write_file' do
+      let(:contents) { '12345' * 1024 }
       let(:data) do
         d = Tempfile.new('test')
-        d.write '12345'
+        d.write contents
         d.rewind
         d
       end
@@ -58,7 +59,26 @@ module GlusterFS
 
       context 'writes file' do
         subject { file.write_file(data) }
-        it('returns bytes written') { should == data.length }
+        specify 'consistently' do
+          subject.should == data.length
+          file.read.should == contents
+        end
+      end
+
+      context 'with small buffer' do
+        subject { file.write_file(data, 0644, 16) }
+        specify 'consistently' do
+          subject.should == data.length
+          file.read.should == contents
+        end
+      end
+
+      context 'with huge buffer' do
+        subject { file.write_file(data, 0644, 102400) }
+        specify 'consistently' do
+          subject.should == data.length
+          file.read.should == contents
+        end
       end
 
       context 'overwrites file' do

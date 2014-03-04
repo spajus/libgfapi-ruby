@@ -339,6 +339,11 @@ module GlusterFS
   attach_function :lstat, :glfs_lstat, [:pointer, :string, :pointer], :int
 
 =begin
+  int glfs_fsync (glfs_fd_t *fd) __THROW;
+=end
+  attach_function :fsync, :glfs_fsync, [:pointer], :int
+
+=begin
   glfs_fd_t *glfs_opendir (glfs_t *fs, const char *path) __THROW;
 =end
   attach_function :opendir, :glfs_opendir, [:pointer, :string], :pointer
