@@ -27,8 +27,7 @@ module GlusterFS
     end
 
     let!(:random_blob) do
-      o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
-      (0...15000).map { o[rand(o.length)] }.join
+      '0' * 1048576 * 5 # 5MB
     end
     let(:volume) { Volume.new(GFS_VOLUME)
                          .mount(GFS_SERVER_HOST, GFS_SERVER_PORT) }
