@@ -1,7 +1,6 @@
 require 'ruby-mass'
 module GlusterFS
 
-  # Set MEM_PRINT=1 MEM_ITERATIONS=10000 to get a stress test
 
   def self.mem_size
     _, size = `ps ax -o pid,rss | grep -E "^[[:space:]]*#{$$}"`.strip.split.map(&:to_i)
@@ -22,6 +21,8 @@ module GlusterFS
         puts "RUBY_FREE_MIN=#{ENV['RUBY_FREE_MIN']}"
         puts "Initial memory use: #{GlusterFS.mem_size}"
         Mass.print
+      else
+        puts "Set MEM_PRINT=1 MEM_ITERATIONS=10000 to get a better memory stress test"
       end
     end
 
