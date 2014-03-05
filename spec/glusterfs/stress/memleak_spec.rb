@@ -9,8 +9,6 @@ module GlusterFS
 
   describe 'memleaks' do
 
-    let(:iterations) { (ENV['MEM_ITERATIONS'] || 100).to_i }
-
     before(:all) do
       if ENV['MEM_PRINT']
         puts "GC Settings"
@@ -22,7 +20,7 @@ module GlusterFS
         puts "Initial memory use: #{GlusterFS.mem_size}"
         Mass.print
       else
-        puts "Set MEM_PRINT=1 MEM_ITERATIONS=10000 to get a better memory stress test"
+        puts "see spec/spec_helper.rb for memory leak test options"
       end
     end
 
@@ -34,9 +32,10 @@ module GlusterFS
     let(:root_dir) { Directory.new(volume, '/memtest-root') }
 
     # Mem leak here! Only run when MEM_ITERATIONS is provided.
-    if ENV['MEM_ITERATIONS']
+    if ENV['MEM_VOLUME_ITERATIONS']
       context 'mount / unmount volume' do
         specify do
+          iterations = GFS_MEM_VOL_ITERATIONS
           puts "Volume Iterations: #{iterations}"
           mem_size_before = GlusterFS.mem_size
           iterations.times do |i|
@@ -57,6 +56,7 @@ module GlusterFS
       before { root_dir.create }
       after { root_dir.delete }
       specify do
+        iterations = GFS_MEM_DIR_ITERATIONS
         puts "Dir Iterations: #{iterations}"
         mem_size_before = GlusterFS.mem_size
         iterations.times do |i|
@@ -75,6 +75,7 @@ module GlusterFS
       before { root_dir.create }
       after { root_dir.delete }
       specify do
+        iterations = GFS_MEM_FILE_ITERATIONS
         puts "File Iterations: #{iterations}"
         mem_size_before = GlusterFS.mem_size
         iterations.times do |i|
