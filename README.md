@@ -4,6 +4,7 @@ Ruby bindings for [libgfapi](https://github.com/gluster/glusterfs/blob/master/ap
 (GlusterFS API). 
 
 [![Gem Version](https://badge.fury.io/rb/libgfapi-ruby.png)](http://badge.fury.io/rb/libgfapi-ruby)
+[![Code Climate](https://codeclimate.com/github/spajus/libgfapi-ruby.png?branch=master)](https://codeclimate.com/github/spajus/libgfapi-ruby)
 
 ## Warning
 
