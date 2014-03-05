@@ -32,7 +32,7 @@ module GlusterFS
     let(:root_dir) { Directory.new(volume, '/memtest-root') }
 
     # Mem leak here! Only run when MEM_ITERATIONS is provided.
-    if ENV['MEM_VOLUME_ITERATIONS']
+    if ENV['MEM_VOL_ITERATIONS']
       context 'mount / unmount volume' do
         specify do
           iterations = GFS_MEM_VOL_ITERATIONS
