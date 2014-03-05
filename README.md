@@ -1,14 +1,10 @@
 # libgfapi-ruby
 
 Ruby bindings for [libgfapi](https://github.com/gluster/glusterfs/blob/master/api/src/glfs.h)
-(GlusterFS API). 
+(GlusterFS API).
 
 [![Gem Version](https://badge.fury.io/rb/libgfapi-ruby.png)](http://badge.fury.io/rb/libgfapi-ruby)
 [![Code Climate](https://codeclimate.com/github/spajus/libgfapi-ruby.png?branch=master)](https://codeclimate.com/github/spajus/libgfapi-ruby)
-
-## Warning
-
-This library is currently under active development, and API may break often.
 
 ## Installation
 
@@ -95,7 +91,12 @@ rake spec
 ## TODO
 
 Major things missing:
-- Directory listing
+- Directory listing / traversal
+
+## Known issues
+
+`GlusterFS::Volume.mount / unmount` [leaks
+memory](https://bugzilla.redhat.com/show_bug.cgi?id=1072854).
 
 ## Contributing
 
