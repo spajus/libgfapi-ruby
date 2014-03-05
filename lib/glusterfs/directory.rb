@@ -20,6 +20,6 @@ class GlusterFS::Directory
   end
 
   def exists?
-    lstat[:st_blocks] > 0
+    lstat[:st_size] > 0
   end
 end
