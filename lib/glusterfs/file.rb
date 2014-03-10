@@ -10,6 +10,7 @@ class GlusterFS::File
     check_exists
     fd = GlusterFS.open(@volume.fs, @path, 0)
     temp = Tempfile.new(path.gsub('/', '-'))
+    temp.binmode
     buff = FFI::MemoryPointer.new(:char, buf_size)
     res = 1
     while res > 0
