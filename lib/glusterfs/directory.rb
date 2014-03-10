@@ -20,6 +20,6 @@ class GlusterFS::Directory
   end
 
   def exists?
-    lstat[:st_size] > 0
+    GlusterFS::Stat.dir?(lstat)
   end
 end

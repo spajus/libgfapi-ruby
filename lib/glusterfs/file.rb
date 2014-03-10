@@ -66,7 +66,7 @@ class GlusterFS::File
   end
 
   def exists?
-    lstat[:st_blocks] > 0
+    GlusterFS::Stat.file?(lstat)
   end
 
   def size
