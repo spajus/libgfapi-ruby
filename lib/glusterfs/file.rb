@@ -9,7 +9,12 @@ class GlusterFS::File
   def read_file(buf_size = 4092)
     check_exists
     fd = GlusterFS.open(@volume.fs, @path, 0)
-    temp = Tempfile.new(path.gsub('/', '-'))
+    if path.include?('.')
+      ext = '.' << path.split('.').pop
+      temp = Tempfile.new([path.gsub('/', '-'), ext])
+    else
+      temp = Tempfile.new(path.gsub('/', '-'))
+    end
     temp.binmode
     buff = FFI::MemoryPointer.new(:char, buf_size)
     res = 1
