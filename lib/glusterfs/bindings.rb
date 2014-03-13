@@ -1,9 +1,16 @@
 module GlusterFS
   extend FFI::Library
 
-  # https://github.com/gluster/glusterfs/blob/master/api/src/glfs.h
-  ffi_lib 'gfapi'
+  @@lib_loaded = false
+  begin
+    # https://github.com/gluster/glusterfs/blob/master/api/src/glfs.h
+    ffi_lib 'gfapi'
+    @@lib_loaded = true
+  rescue LoadError => e
+    puts "GlusterFS API failed to load native library. Install 'libgfapi-devel'. #{e.message}"
+  end
 
+  if @@lib_loaded
 =begin
   SYNOPSIS
 
@@ -366,5 +373,6 @@ module GlusterFS
   attach_function :readdir_r, :glfs_readdir_r, [:pointer, :pointer, :pointer], :int
 
   # TODO the rest
+  end # if @@lib_loaded
 
 end
