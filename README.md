@@ -71,6 +71,16 @@ volume.delete_file('/gfs/file/path')
 volume.unmount
 ```
 
+## Troubleshooting
+- If volume mount fails, you may need to [set volume
+  option](http://gluster.org/community/documentation/index.php/Gluster_3.2:_Setting_Volume_Options)
+  to allow insecure RPC (`rpc-auth-allow-insecure on`).
+- If you get a SEGFAULT, it most likely means you're trying to do something without checking if
+  it's possible, i.e.:
+  1. Create a directory `/foo/bar` while `/foo` does not exist.
+  2. Write a file `/foo/bar/baz.txt` while `/foo/bar` directory does not exit.
+
+
 ## Running Specs
 
 Run specs with `rake spec`. However, you need glusterfs-server running somewhere, and a test mount.
