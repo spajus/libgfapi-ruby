@@ -90,6 +90,54 @@ export GFS_SERVER_PORT=24007
 rake spec
 ```
 
+## Performance
+
+There is performance spec: `spec/glusterfs/stress/performance_spec.rb`. You can edit values at
+`spec/spec_helper.rb` or provide ENV variables to run it on your system. Here's how 1000 iterations
+of create/delete directories with various file sizes looks like:
+
+```
+# 5 Kb files
+Native FS Time:  1000 iterations:  0.1400 sec
+Mounted FS Time: 1000 iterations: 44.0874 sec
+GFS API Time:    1000 iterations: 42.4865 sec
+
+# 70 Kb files
+Native FS Time:  1000 iterations:  0.6270 sec
+Mounted FS Time: 1000 iterations: 79.2414 sec
+GFS API Time:    1000 iterations: 46.4481 sec
+
+# 5 Mb files
+Native FS Time:  1000 iterations:   6.1057 sec
+Mounted FS Time: 1000 iterations:  94.8507 sec
+GFS API Time:    1000 iterations: 118.8812 sec
+```
+
+Tests were run on CentOS with Intel(R) Xeon(R) CPU E5-2407 0 @ 2.20GHz, 128GB RAM, with following
+GlusterFS Volume configuration:
+
+```
+Volume Name: dist-volume
+Type: Replicate
+Volume ID: <skipped>
+Status: Started
+Number of Bricks: 1 x 2 = 2
+Transport-type: tcp
+Bricks:
+Brick1: server1:/var/lib/gfs/dist-volume
+Brick2: server2:/var/lib/gfs/dist-volume
+Options Reconfigured:
+server.allow-insecure: on
+features.worm: disable
+network.frame-timeout: 10
+diagnostics.latency-measurement: on
+performance.cache-size: 1024MB
+cluster.data-self-heal-algorithm: full
+nfs.disable: yes
+performance.write-behind-window-size: 128MB
+performance.cache-refresh-timeout: 10
+```
+
 ## TODO
 
 Major things missing:
