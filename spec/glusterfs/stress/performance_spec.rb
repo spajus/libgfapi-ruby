@@ -1,10 +1,11 @@
+require 'spec_helper'
 require 'ruby-mass'
 require 'fileutils'
 require 'benchmark'
 module GlusterFS
 
   describe 'performance' do
-    let(:file_mount_point) { ENV['GFS_MOUNT_DIR'] || '/mnt/dist-volume' }
+    let(:file_mount_point) { GFS_FS_MOUNT }
     let!(:random_blob) do
       '0' * 1048576 * 5 # 5MB
     end
@@ -13,7 +14,7 @@ module GlusterFS
       test_dir ="/tmp/fs-perftest-root"
       FileUtils.rm_rf test_dir
       iterations = GFS_PERF_NATIVE_ITERATIONS
-      puts "Natife FS iterations: #{iterations}"
+      puts "Native FS iterations: #{iterations}"
       time = Benchmark.realtime do
         FileUtils.mkdir_p test_dir
         iterations.times do |i|
