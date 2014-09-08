@@ -36,7 +36,7 @@ dir = GlusterFS::Directory.new(volume, '/some_dir')
 dir.create
 
 # Delete a directory
-dir = GlusterDS::Directory.new(volume, '/some_dir')
+dir = GlusterFS::Directory.new(volume, '/some_dir')
 dir.delete
 # or
 volume.delete_dir('/some_dir')
